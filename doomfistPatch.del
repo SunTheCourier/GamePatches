@@ -1,0 +1,86 @@
+globalvar define maxPunches = WorkshopSettingInteger("Doomfist", "Max Punches", 3, 1, 6, 0);
+playervar define punchCount = maxPunches;
+globalvar define doomFulldoomCooldownTime = WorkshopSettingInteger("Doomfist", "Punch Recharge Rate In Seconds", 6, 5, 12, 0);
+playervar define doomCooldownTime = doomFulldoomCooldownTime;
+
+rule: "Doomfist Patch Pt1"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Doomfist)
+if (IsFiringSecondary(EventPlayer()))
+{
+    removePunch();
+    SetDamageDealt(EventPlayer(), 38);
+    Wait(1.5, WaitBehavior.RestartWhenTrue);
+    SetDamageDealt(EventPlayer(), 100);
+}
+
+playervar define PunchText;
+playervar define doomCooldownText;
+rule : "Doomfist Patch Pt2"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Doomfist)
+{
+    CreateHudText(EventPlayer(), <"Punches: <0>", punchCount>, null, null, Location.Left, 0, CustomColor(169, 0, 0, 255), CustomColor(169, 0, 0, 255), CustomColor(169, 0, 0, 255), HudTextRev.String, Spectators.DefaultVisibility);  
+    PunchText = LastTextID();
+    CreateHudText(EventPlayer(), <"<0>", punchCount >= maxPunches ? doomFulldoomCooldownTime : RoundToInteger(doomCooldownTime, Rounding.Up)>, null, null, Location.Left, 1, CustomColor(169, 0, 0, 255), CustomColor(169, 0, 0, 255), CustomColor(169, 0, 0, 255), HudTextRev.String, Spectators.DefaultVisibility);  
+    doomCooldownText = LastTextID();
+    ChaseVariableOverTime(doomCooldownTime, 0.0, doomFulldoomCooldownTime, TimeChaseReevaluation.DestinationAndDuration);
+}
+
+rule : "Doomfist Patch Pt3"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) != Hero.Doomfist)
+{
+    DestroyHudText(PunchText);
+    DestroyHudText(doomCooldownText);
+    StopChasingVariable(doomCooldownTime);
+
+    SetSecondaryFireEnabled(EventPlayer(), true);
+}
+
+rule: "Doomfist Patch Pt4"
+Event.OngoingPlayer
+if (doomCooldownTime == 0.0)
+if (punchCount != maxPunches)
+{
+    addPunch();
+}
+
+rule : "Doomfist Patch Pt5"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Doomfist)
+if (punchCount == 0)
+if (!IsFiringSecondary(EventPlayer()))
+{
+    Wait(0.5, WaitBehavior.IgnoreCondition);
+    SetSecondaryFireEnabled(EventPlayer(), false);
+    SetAbilityCooldown(EventPlayer(), Button.SecondaryFire, doomCooldownTime);
+}
+
+rule: "Doomfist Patch Pt6"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Doomfist)
+if (IsUsingUltimate(EventPlayer()))
+if (punchCount != maxPunches)
+{
+    addPunch();
+}
+
+void addPunch()
+{
+    SetSecondaryFireEnabled(EventPlayer(), true);
+    punchCount++;
+    doomCooldownTime = doomFulldoomCooldownTime;
+}
+
+void removePunch()
+{
+    if (punchCount == maxPunches)
+    {
+        doomCooldownTime = doomFulldoomCooldownTime;
+    }
+    if (punchCount <= 0)
+        return;
+        
+    punchCount--;
+}

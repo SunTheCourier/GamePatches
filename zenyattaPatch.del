@@ -1,0 +1,21 @@
+rule : "Zenyatta Patch Pt1"
+Event.OnDamageDealt
+if (HeroOf(EventPlayer()) == Hero.Zenyatta)
+if (EventAbility() == Button.Melee)
+{
+   SetStatus(Victim(), EventPlayer(), Status.KnockedDown, 0.5);
+}
+
+rule : "Zenyatta Patch Pt2"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Zenyatta)
+{
+   SetHealingDealt(EventPlayer(), 110);
+}
+
+rule : "Zenyatta Patch Pt3"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) != Hero.Zenyatta)
+{
+   SetHealingDealt(EventPlayer(), 100);
+}

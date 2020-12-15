@@ -1,0 +1,22 @@
+import "settings/settings.lobby";
+
+//import "brigittePatch.del";
+import "doomfistPatch.del";
+import "zaryaPatch.del";
+import "zenyattaPatch.del";
+//import "sigmaPatch.del";
+
+rule: "Mercy Patch"
+Event.OngoingPlayer
+if (IsUsingUltimate(EventPlayer()))
+if (HeroOf(EventPlayer()) == Hero.Mercy)
+{
+   SetAbilityCooldown(EventPlayer(), Button.Ability2, 0);
+}
+
+rule : "Echo Patch"
+Event.OnElimination
+if (HeroOf(EventPlayer()) == Hero.Echo)
+{
+   SetAbilityCooldown(EventPlayer(), Button.Ability1, 0);
+}

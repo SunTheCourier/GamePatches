@@ -1,0 +1,80 @@
+rule : "Sigma Patch Pt1"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Sigma)
+if (IsButtonHeld(EventPlayer(), Button.Interact))
+{
+    Wait(0.19, WaitBehavior.IgnoreCondition);
+    PressButton(EventPlayer(), Button.SecondaryFire);
+    SetSecondaryFireEnabled(EventPlayer(), false);
+}
+
+rule : "Sigma Patch Pt2"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Sigma)
+if (IsUsingAbility1())
+{
+    Wait(0.19, WaitBehavior.IgnoreCondition);
+    PressButton(EventPlayer(), Button.SecondaryFire);
+    SetSecondaryFireEnabled(EventPlayer(), false);
+}
+
+rule : "Sigma Patch Pt3"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Sigma)
+if (!IsUsingAbility1())
+{
+    SetSecondaryFireEnabled(EventPlayer(), true);
+}
+
+rule : "Sigma Patch Pt4"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Sigma)
+if (IsUsingAbility2())
+{
+    Wait(0.19, WaitBehavior.IgnoreCondition);
+    PressButton(EventPlayer(), Button.SecondaryFire);
+    SetSecondaryFireEnabled(EventPlayer(), false);
+}
+
+rule : "Sigma Patch Pt5"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Sigma)
+if (!IsUsingAbility2())
+{
+    SetSecondaryFireEnabled(EventPlayer(), true);
+}
+rule : "Sigma Patch Pt6"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Sigma)
+if (IsFiringPrimary())
+{
+    Wait(0.19, WaitBehavior.IgnoreCondition);
+    PressButton(EventPlayer(), Button.SecondaryFire);
+    SetSecondaryFireEnabled(EventPlayer(), false);
+}
+
+rule : "Sigma Patch Pt7"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Sigma)
+if (!IsFiringPrimary())
+{
+    SetSecondaryFireEnabled(EventPlayer(), true);
+}
+
+rule : "Sigma Patch Pt8"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Sigma)
+if (IsUsingUltimate())
+{
+    Wait(0.19, WaitBehavior.IgnoreCondition);
+    PressButton(EventPlayer(), Button.SecondaryFire);
+    SetSecondaryFireEnabled(EventPlayer(), false);
+}
+
+rule : "Sigma Patch Pt9"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Sigma)
+if (!IsUsingUltimate())
+{
+    SetSecondaryFireEnabled(EventPlayer(), true);
+}

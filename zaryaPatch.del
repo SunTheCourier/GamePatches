@@ -1,0 +1,99 @@
+globalvar define maxBubbles = WorkshopSettingInteger("Zarya", "Max Bubbles", 2, 1, 6, 0);
+playervar define bubbleCount = maxBubbles;
+globalvar define zaryaFullzaryaCooldownTime = WorkshopSettingInteger("Zarya", "Bubble Recharge Rate In Seconds", 10, 5, 12, 0);
+playervar define zaryaCooldownTime = zaryaFullzaryaCooldownTime;
+
+rule: "Zarya Patch Pt1"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Zarya)
+if (IsUsingAbility2(EventPlayer()))
+{
+    removeBubble();
+}
+
+rule: "Zarya Patch Pt1.5"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Zarya)
+if (IsUsingAbility1(EventPlayer()))
+{
+    removeBubble();
+}
+
+playervar define bubbleText;
+playervar define zaryaCooldownText;
+rule : "Zarya Patch Pt2"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Zarya)
+{
+    CreateHudText(EventPlayer(), <"Bubbles: <0>", bubbleCount>, null, null, Location.Left, 0, CustomColor(255, 115, 193, 255), CustomColor(255, 115, 193, 255), CustomColor(255, 115, 193, 255), HudTextRev.String, Spectators.DefaultVisibility);  
+    bubbleText = LastTextID();
+    CreateHudText(EventPlayer(), <"<0>", bubbleCount >= maxBubbles ? zaryaFullzaryaCooldownTime : RoundToInteger(zaryaCooldownTime, Rounding.Up)>, null, null, Location.Left, 1, CustomColor(255, 115, 193, 255), CustomColor(255, 115, 193, 255), CustomColor(255, 115, 193, 255), HudTextRev.String, Spectators.DefaultVisibility);  
+    zaryaCooldownText = LastTextID();
+    ChaseVariableOverTime(zaryaCooldownTime, 0.0, zaryaFullzaryaCooldownTime, TimeChaseReevaluation.DestinationAndDuration);
+}
+
+rule : "Zarya Patch Pt3"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) != Hero.Zarya)
+{
+    DestroyHudText(bubbleText);
+    DestroyHudText(zaryaCooldownText);
+    StopChasingVariable(zaryaCooldownTime);
+
+    SetAbility1Enabled(EventPlayer(), true);
+    SetAbility2Enabled(EventPlayer(), true);
+}
+
+rule: "Zarya Patch Pt4"
+Event.OngoingPlayer
+if (zaryaCooldownTime == 0.0)
+if (bubbleCount != maxBubbles)
+{
+    addBubble();
+}
+
+rule : "Zarya Patch Pt5"
+Event.OngoingPlayer
+if (bubbleCount == 0)
+{
+    if (IsUsingAbility1(EventPlayer()))
+    {
+        SetAbility2Enabled(EventPlayer(), false);
+    }
+    if (IsUsingAbility2(EventPlayer()))
+    {
+        SetAbility1Enabled(EventPlayer(), false);
+    }
+    Wait(2, WaitBehavior.IgnoreCondition);
+    if (bubbleCount == 0)
+    {
+        SetAbilityCooldown(EventPlayer(), Button.Ability1, zaryaCooldownTime);
+        SetAbilityCooldown(EventPlayer(), Button.Ability2, zaryaCooldownTime);
+    }
+}
+
+rule: "Zarya Patch Pt6"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Zarya)
+if (IsUsingUltimate(EventPlayer()))
+{
+    if (bubbleCount != maxBubbles)
+        addBubble();
+}
+
+void addBubble()
+{
+    SetAbility1Enabled(EventPlayer(), true);
+    SetAbility2Enabled(EventPlayer(), true);
+    bubbleCount++;
+    zaryaCooldownTime = zaryaFullzaryaCooldownTime;
+}
+
+void removeBubble()
+{
+    if (bubbleCount == maxBubbles)
+    {
+        zaryaCooldownTime = zaryaFullzaryaCooldownTime;
+    }
+    bubbleCount--;
+}

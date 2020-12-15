@@ -1,0 +1,26 @@
+{
+    "Heroes": {
+        "General": {
+            "Reaper": {
+                "Shadow Step Cooldown Time": 94.0
+            },
+            "Zarya": {
+                "Particle Barrier Cooldown Time": 0.0,
+                "Projected Barrier Cooldown Time": 0.0
+            },
+            "Doomfist": {
+                "Rocket Punch Cooldown Time": 0.0
+            }
+        }
+    },
+    "Modes": {
+        "Deathmatch": {
+            "Enabled": true,
+            "Score To Win": 25
+        }
+    },
+    "Lobby": {
+        "Allow Players Who Are In Queue": true,
+        "Match Voice Chat": true
+    }
+}

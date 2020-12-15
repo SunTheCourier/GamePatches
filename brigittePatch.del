@@ -1,0 +1,27 @@
+rule : "Brigitte Patch Pt1"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Brigitte)
+if (IsFiringPrimary(EventPlayer()) && IsFiringSecondary(EventPlayer()))
+{
+   Wait(0.2, WaitBehavior.IgnoreCondition);
+   Damage(EventPlayer(), EventPlayer(), 25);
+   SetStatus(EventPlayer(), EventPlayer(), Status.KnockedDown, 0.5);
+}
+
+
+rule: "Brigitte Patch Pt2"
+Event.OnDamageDealt
+if (HeroOf(EventPlayer()) == Hero.Brigitte)
+if (EventAbility() == Button.Ability1)
+{
+   Damage(Victim(), EventPlayer(), 25);
+   SetStatus(Victim(), EventPlayer(), Status.KnockedDown, 0.5);
+}
+
+rule: "Brigitte Patch Pt3"
+Event.OngoingPlayer
+if (HeroOf(EventPlayer()) == Hero.Brigitte)
+if (IsUsingAbility1(EventPlayer()))
+{
+      ApplyImpulse(EventPlayer(), FacingDirectionOf(EventPlayer()) * -1, 16.0, Relative.ToWorld, ContraryMotion.Cancel);
+}
