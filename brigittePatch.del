@@ -1,15 +1,4 @@
-rule : "Brigitte Patch Pt1"
-Event.OngoingPlayer
-if (HeroOf(EventPlayer()) == Hero.Brigitte)
-if (IsFiringPrimary(EventPlayer()) && IsFiringSecondary(EventPlayer()))
-{
-   Wait(0.2, WaitBehavior.IgnoreCondition);
-   Damage(EventPlayer(), EventPlayer(), 25);
-   SetStatus(EventPlayer(), EventPlayer(), Status.KnockedDown, 0.5);
-}
-
-
-rule: "Brigitte Patch Pt2"
+rule: "Brigitte Patch Pt1"
 Event.OnDamageDealt
 if (HeroOf(EventPlayer()) == Hero.Brigitte)
 if (EventAbility() == Button.Ability1)
@@ -18,7 +7,7 @@ if (EventAbility() == Button.Ability1)
    SetStatus(Victim(), EventPlayer(), Status.KnockedDown, 0.5);
 }
 
-rule: "Brigitte Patch Pt3"
+rule: "Brigitte Patch Pt2"
 Event.OngoingPlayer
 if (HeroOf(EventPlayer()) == Hero.Brigitte)
 if (IsUsingAbility1(EventPlayer()))

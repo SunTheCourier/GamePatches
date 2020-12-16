@@ -1,6 +1,6 @@
-import "settings/settings.lobby";
+import "settings/dmSettings.lobby";
 
-//import "brigittePatch.del";
+import "brigittePatch.del";
 import "doomfistPatch.del";
 import "zaryaPatch.del";
 import "zenyattaPatch.del";
